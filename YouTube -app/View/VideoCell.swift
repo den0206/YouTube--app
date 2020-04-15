@@ -12,6 +12,12 @@ import UIKit
 
 class VideoCell : UICollectionViewCell {
     
+    var video : Video? {
+        didSet {
+            
+        }
+    }
+    
     //MARK: - Parts
     
     private let thumbnailImageView : UIImageView = {
@@ -36,6 +42,8 @@ class VideoCell : UICollectionViewCell {
         label.font = UIFont.systemFont(ofSize: 16)
         label.textColor = .black
         label.text = "Title label"
+        label.numberOfLines = 2
+        
         return label
     }()
     
@@ -47,7 +55,7 @@ class VideoCell : UICollectionViewCell {
         return label
     }()
     
-    
+    var titleLabelHeightConstraint : NSLayoutConstraint?
     
     private let separatorView : UIView = {
         let view = UIView()
@@ -74,7 +82,8 @@ class VideoCell : UICollectionViewCell {
         
         addSubview(stack)
         stack.anchor(top : thumbnailImageView.bottomAnchor, left: profileImageView.rightAnchor, right:  rightAnchor , paddongTop: 8,paddingLeft: 16,paddingRight: 16)
-        
+//        titleLabel.heightAnchor.constraint(equalToConstant: titleLabelHeightConstraint!.constant).isActive = true
+//        
         
         
         addSubview(separatorView)
@@ -86,5 +95,33 @@ class VideoCell : UICollectionViewCell {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func configure() {
+        
+        guard let video = video else {return}
+        
+        titleLabel.text = video.title
+        
+        let numbeFormatter = NumberFormatter()
+            numbeFormatter.numberStyle = .decimal
+        
+        let subtitle = "\(video.channel?.name) * \(video.numberOfView) "
+        
+        //measure title text
+        guard let title = video.title else {return}
+        let size = CGSize(width: frame.width - 16 - 44 - 8 - 16, height: 1000)
+        let options = NSStringDrawingOptions.usesFontLeading.union(.usesLineFragmentOrigin)
+        let estimatedRect = NSString(string: title).boundingRect(with: size, options: options, attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14)], context: nil)
+        
+        if estimatedRect.size.height > 20 {
+            titleLabelHeightConstraint?.constant = 44
+        } else {
+            titleLabelHeightConstraint?.constant = 20
+        }
+        
+        
+        
+        
     }
 }

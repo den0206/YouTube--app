@@ -12,6 +12,8 @@ private let reuseIdentifer = "VideoCell"
 
 class HomeController: UICollectionViewController {
     
+    var videos = [Video]()
+    
     let menuBar : MenuBar = {
         let mb = MenuBar()
         return mb
@@ -35,6 +37,7 @@ class HomeController: UICollectionViewController {
     private func configureCV() {
         
         setupMenuBar()
+        setNavBarButtons()
         
         collectionView.backgroundColor = .white
         collectionView.register(VideoCell.self, forCellWithReuseIdentifier: reuseIdentifer)
@@ -51,7 +54,25 @@ class HomeController: UICollectionViewController {
         collectionView.contentInset = UIEdgeInsets(top: 50, left: 0, bottom: 0, right: 0)
         collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 50, left: 0, bottom: 0, right: 0)
     }
-
+    
+    private func setNavBarButtons() {
+        
+        let searchButton = UIBarButtonItem(image: #imageLiteral(resourceName: "search_icon").withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleSearch))
+        
+        let moreButton = UIBarButtonItem(image:UIImage(named: "nav_more_icon")?.withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleMore))
+        navigationItem.rightBarButtonItems = [moreButton, searchButton]
+        
+    }
+    
+    //MARK: - Actions
+    
+    @objc func handleSearch() {
+        print("search")
+    }
+    
+    @objc func handleMore() {
+        print("Mores")
+    }
 
 }
 
