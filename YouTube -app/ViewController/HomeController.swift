@@ -27,7 +27,8 @@ class HomeController: UICollectionViewController {
     
     
     private func configureCV() {
-        navigationItem.title = "Home"
+        
+        configureNav(title: "Home", preferLargeTitle: false)
         
         collectionView.backgroundColor = .white
         collectionView.register(VideoCell.self, forCellWithReuseIdentifier: reuseIdentifer)
@@ -54,8 +55,9 @@ extension HomeController {
 extension HomeController : UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let height = (view.frame.width - 16 - 16) * 9 / 16
         
-        return CGSize(width: view.frame.width, height: 200)
+        return CGSize(width: view.frame.width, height: height + 16 + 68)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {

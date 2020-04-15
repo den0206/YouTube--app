@@ -78,4 +78,40 @@ extension UIView {
         heightAnchor.constraint(equalToConstant: height).isActive = true
     }
     
+
+
 }
+
+extension UIViewController {
+    func configureNav(title : String, preferLargeTitle : Bool) {
+        
+        let appearence = UINavigationBarAppearance()
+        appearence.configureWithOpaqueBackground()
+        appearence.largeTitleTextAttributes = [.foregroundColor : UIColor.white]
+//        appearence.backgroundColor = UIColor(red: 230/255, green: 32/255, blue: 31/255, alpha: 1)
+        appearence.backgroundColor = UIColor.rgb(red: 230, green: 32, blue: 31)
+        
+        
+        navigationController?.navigationBar.standardAppearance = appearence
+        navigationController?.navigationBar.compactAppearance = appearence
+        navigationController?.navigationBar.scrollEdgeAppearance = appearence
+        
+        navigationController?.navigationBar.prefersLargeTitles = preferLargeTitle
+        let titleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: view.frame.width - 32, height: view.frame.height))
+        titleLabel.text = title
+        
+        navigationItem.titleView = titleLabel
+        
+        navigationController?.navigationBar.tintColor = .white
+        navigationController?.navigationBar.isTranslucent = true
+        
+        navigationController?.navigationBar.overrideUserInterfaceStyle = .dark
+    }
+}
+
+extension UIColor {
+    static func rgb(red : CGFloat, green : CGFloat, blue : CGFloat) -> UIColor {
+        return UIColor(red: red/255, green: green/255, blue: blue/255, alpha: 1)
+    }
+}
+

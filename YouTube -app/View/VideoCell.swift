@@ -14,14 +14,18 @@ class VideoCell : UICollectionViewCell {
     
     private let thumbnailImageView : UIImageView = {
         let iv = UIImageView()
-        iv.backgroundColor = .blue
-       
+        iv.backgroundColor = .lightGray
+        iv.contentMode = .scaleAspectFill
+        iv.clipsToBounds = true
         return iv
     }()
     
     private let profileImageView : UIImageView = {
          let iv = UIImageView()
-         iv.backgroundColor = .green
+         iv.backgroundColor = .lightGray
+        iv.setDimension(width: 43, height: 43)
+        iv.clipsToBounds = true
+        iv.layer.cornerRadius = 43 / 2
          return iv
      }()
      
@@ -45,7 +49,7 @@ class VideoCell : UICollectionViewCell {
     
     private let separatorView : UIView = {
         let view = UIView()
-        view.backgroundColor = .black
+        view.backgroundColor = UIColor(red: 230/255, green: 230/255, blue: 230/255, alpha: 1)
         
         return view
     }()
@@ -57,10 +61,10 @@ class VideoCell : UICollectionViewCell {
         
         addSubview(thumbnailImageView)
 
-        thumbnailImageView.anchor(top: topAnchor, left: leftAnchor, right: rightAnchor,paddingLeft: 16, paddingRight: 16,width: self.frame.width, height: 135)
+        thumbnailImageView.anchor(top: topAnchor, left: leftAnchor, right: rightAnchor,paddongTop: 8, paddingLeft: 16, paddingRight: 16,width: self.frame.width, height: 235)
         
         addSubview(profileImageView)
-        profileImageView.anchor(top : thumbnailImageView.bottomAnchor, left: leftAnchor,paddongTop: 8,paddingLeft: 16,paddiongBottom: 8, width: 43,height: 43 )
+        profileImageView.anchor(top : thumbnailImageView.bottomAnchor, left: leftAnchor,paddongTop: 8,paddingLeft: 16,paddiongBottom: 8 )
         
         let stack = UIStackView(arrangedSubviews: [titleLabel, subTitleLabel])
         stack.axis = . vertical
