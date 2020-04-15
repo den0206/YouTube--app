@@ -12,6 +12,12 @@ private let reuseIdentifer = "VideoCell"
 
 class HomeController: UICollectionViewController {
     
+    let menuBar : MenuBar = {
+        let mb = MenuBar()
+        return mb
+    }()
+    
+    
     init() {
         super.init(collectionViewLayout: UICollectionViewFlowLayout())
     }
@@ -28,10 +34,22 @@ class HomeController: UICollectionViewController {
     
     private func configureCV() {
         
-        configureNav(title: "Home", preferLargeTitle: false)
+        setupMenuBar()
         
         collectionView.backgroundColor = .white
         collectionView.register(VideoCell.self, forCellWithReuseIdentifier: reuseIdentifer)
+    }
+    
+    private func setupMenuBar() {
+        
+        configureNav(title: "Home", preferLargeTitle: false)
+        
+        view.addSubview(menuBar)
+        menuBar.anchor(top: view.safeAreaLayoutGuide.topAnchor, left: view.leftAnchor,  right: view.rightAnchor,  width: view.frame.width, height: 50)
+        
+        /// set start line
+        collectionView.contentInset = UIEdgeInsets(top: 50, left: 0, bottom: 0, right: 0)
+        collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 50, left: 0, bottom: 0, right: 0)
     }
 
 
@@ -65,3 +83,8 @@ extension HomeController : UICollectionViewDelegateFlowLayout {
         return 0
     }
 }
+
+
+
+
+

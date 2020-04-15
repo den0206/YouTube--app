@@ -8,6 +8,8 @@
 
 import UIKit
 
+
+
 class VideoCell : UICollectionViewCell {
     
     //MARK: - Parts
