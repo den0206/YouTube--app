@@ -12,7 +12,7 @@ struct Video : Codable {
     
     let thumbnailImageName : String?
     let title : String?
-    var numberOfView : Int?
+    var numberOfViews : Int?
     var uploadDate: Date?
     
     let channel : Channel?
@@ -21,7 +21,7 @@ struct Video : Codable {
 class Channel : Codable {
     
     let name : String?
-    let progileImageName : String?
+    let profileImageName : String?
 }
 
 

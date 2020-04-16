@@ -14,25 +14,27 @@ class VideoCell : UICollectionViewCell {
     
     var video : Video? {
         didSet {
-            
+            configure()
         }
     }
     
     //MARK: - Parts
     
-    private let thumbnailImageView : UIImageView = {
-        let iv = UIImageView()
+    private let thumbnailImageView : CustomImageView = {
+        let iv = CustomImageView()
         iv.backgroundColor = .lightGray
         iv.contentMode = .scaleAspectFill
         iv.clipsToBounds = true
         return iv
     }()
     
-    private let profileImageView : UIImageView = {
-         let iv = UIImageView()
+    private let profileImageView : CustomImageView = {
+         let iv = CustomImageView()
          iv.backgroundColor = .lightGray
         iv.setDimension(width: 43, height: 43)
         iv.clipsToBounds = true
+        iv.layer.masksToBounds = true
+        iv.contentMode = .scaleAspectFill
         iv.layer.cornerRadius = 43 / 2
          return iv
      }()
@@ -83,7 +85,7 @@ class VideoCell : UICollectionViewCell {
         addSubview(stack)
         stack.anchor(top : thumbnailImageView.bottomAnchor, left: profileImageView.rightAnchor, right:  rightAnchor , paddongTop: 8,paddingLeft: 16,paddingRight: 16)
 //        titleLabel.heightAnchor.constraint(equalToConstant: titleLabelHeightConstraint!.constant).isActive = true
-//        
+        
         
         
         addSubview(separatorView)
@@ -103,10 +105,20 @@ class VideoCell : UICollectionViewCell {
         
         titleLabel.text = video.title
         
+        setupProfileImage()
+    
+        setupThumbnail()
+        
         let numbeFormatter = NumberFormatter()
             numbeFormatter.numberStyle = .decimal
         
-        let subtitle = "\(video.channel?.name) * \(video.numberOfView) "
+        if let channelName = video.channel?.name, let numberOfVievs = video.numberOfViews {
+            
+            let numberFormatter = NumberFormatter()
+            numberFormatter.numberStyle = .decimal
+            let subtitleText = "\(channelName) - \(numberFormatter.string(from: NSNumber(value: numberOfVievs))!) — 2 years ago"
+            subTitleLabel.text = subtitleText
+        }
         
         //measure title text
         guard let title = video.title else {return}
@@ -120,8 +132,19 @@ class VideoCell : UICollectionViewCell {
             titleLabelHeightConstraint?.constant = 20
         }
         
+ 
         
-        
-        
+    }
+    
+    func setupThumbnail() {
+        if let thumbnailImageUrl = video?.thumbnailImageName {
+            thumbnailImageView.loadImageUsingUrl(urlString: thumbnailImageUrl)
+        }
+    }
+    
+    func setupProfileImage() {
+        if let profileImageUrl = video?.channel?.profileImageName {
+            profileImageView.loadImageUsingUrl(urlString: profileImageUrl)
+        }
     }
 }

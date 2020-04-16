@@ -12,7 +12,11 @@ private let reuseIdentifer = "VideoCell"
 
 class HomeController: UICollectionViewController {
     
-    var videos = [Video]()
+    var videos = [Video]() {
+        didSet {
+            collectionView.reloadData()
+        }
+    }
     
     let menuBar : MenuBar = {
         let mb = MenuBar()
@@ -31,8 +35,14 @@ class HomeController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureCV()
+        
+        APIService.shared.fetchVideos { (videos) in
+            
+            self.videos = videos
+        }
     }
     
+ 
     
     private func configureCV() {
         
@@ -79,13 +89,14 @@ class HomeController: UICollectionViewController {
 extension HomeController {
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 5
+        return videos.count
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifer, for: indexPath) as! VideoCell
         
+        cell.video = videos[indexPath.item]
         
         return cell
         
