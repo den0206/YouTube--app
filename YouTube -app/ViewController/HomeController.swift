@@ -23,6 +23,9 @@ class HomeController: UICollectionViewController {
         return mb
     }()
     
+    lazy var settingLauncher = SettingLauncher()
+    
+    
     
     init() {
         super.init(collectionViewLayout: UICollectionViewFlowLayout())
@@ -76,13 +79,17 @@ class HomeController: UICollectionViewController {
     
     //MARK: - Actions
     
+    @objc func handleMore() {
+        settingLauncher.showSettings()
+
+    }
+    
     @objc func handleSearch() {
         print("search")
     }
     
-    @objc func handleMore() {
-        print("Mores")
-    }
+  
+    
 
 }
 
