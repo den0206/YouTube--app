@@ -80,6 +80,7 @@ class HomeController: UICollectionViewController {
     //MARK: - Actions
     
     @objc func handleMore() {
+        settingLauncher.delegate = self
         settingLauncher.showSettings()
 
     }
@@ -88,8 +89,7 @@ class HomeController: UICollectionViewController {
         print("search")
     }
     
-  
-    
+
 
 }
 
@@ -108,6 +108,8 @@ extension HomeController {
         return cell
         
     }
+    
+    
 }
 extension HomeController : UICollectionViewDelegateFlowLayout {
     
@@ -123,6 +125,21 @@ extension HomeController : UICollectionViewDelegateFlowLayout {
     }
 }
 
+extension HomeController : SettingLauncherDelegate {
+    func showControllerForSetting(setting: Setting) {
+        /// dummy Example
+        
+        let dummySerringViewController = UIViewController()
+        dummySerringViewController.view.backgroundColor = .white
+        dummySerringViewController.navigationItem.title = setting.name.rawValue
+        navigationController?.navigationBar.tintColor = .white
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+        navigationController?.pushViewController(dummySerringViewController, animated: true)
+        
+    }
+    
+    
+}
 
 
 
