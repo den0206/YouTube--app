@@ -20,6 +20,7 @@
 		3AC6EE13244884C300CBE4A8 /* customImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC6EE12244884C300CBE4A8 /* customImageView.swift */; };
 		3AC6EE1524489A2200CBE4A8 /* SettingLauncher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC6EE1424489A2200CBE4A8 /* SettingLauncher.swift */; };
 		3AD8FD0E2447C567005BA380 /* Video.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AD8FD0D2447C567005BA380 /* Video.swift */; };
+		3AEB7945244AA95500442EDE /* VideoLauncher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AEB7944244AA95500442EDE /* VideoLauncher.swift */; };
 		3AFAC3262449C82F00E0E9E4 /* Setting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AFAC3252449C82F00E0E9E4 /* Setting.swift */; };
 		3AFAC3282449C8B300E0E9E4 /* SettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AFAC3272449C8B300E0E9E4 /* SettingCell.swift */; };
 /* End PBXBuildFile section */
@@ -40,6 +41,7 @@
 		3AC6EE12244884C300CBE4A8 /* customImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = customImageView.swift; sourceTree = "<group>"; };
 		3AC6EE1424489A2200CBE4A8 /* SettingLauncher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingLauncher.swift; sourceTree = "<group>"; };
 		3AD8FD0D2447C567005BA380 /* Video.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Video.swift; sourceTree = "<group>"; };
+		3AEB7944244AA95500442EDE /* VideoLauncher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoLauncher.swift; sourceTree = "<group>"; };
 		3AFAC3252449C82F00E0E9E4 /* Setting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Setting.swift; sourceTree = "<group>"; };
 		3AFAC3272449C8B300E0E9E4 /* SettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -93,6 +95,7 @@
 			children = (
 				3A57E18024471F22002FDBAF /* HomeController.swift */,
 				3AC6EE1424489A2200CBE4A8 /* SettingLauncher.swift */,
+				3AEB7944244AA95500442EDE /* VideoLauncher.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -207,6 +210,7 @@
 				3A9BFD302447255400A1DDA9 /* Extensions.swift in Sources */,
 				3A57E18124471F22002FDBAF /* HomeController.swift in Sources */,
 				3AFAC3282449C8B300E0E9E4 /* SettingCell.swift in Sources */,
+				3AEB7945244AA95500442EDE /* VideoLauncher.swift in Sources */,
 				3AB3B044244744F500D85F41 /* MenuBar.swift in Sources */,
 				3AC6EE13244884C300CBE4A8 /* customImageView.swift in Sources */,
 				3A57E19424472303002FDBAF /* VideoCell.swift in Sources */,

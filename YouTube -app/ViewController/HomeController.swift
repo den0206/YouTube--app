@@ -19,11 +19,8 @@ class HomeController: UICollectionViewController {
         }
     }
     
-    var feeds = [Video]() {
-        didSet {
-            collectionView.reloadData()
-        }
-    }
+    var feeds = [Video]()
+
     var trends = [Video]()
     var subscriotipns = [Video]()
     
@@ -36,8 +33,6 @@ class HomeController: UICollectionViewController {
             return trends
         case .Subscription :
             return subscriotipns
-        default:
-            return feeds
         }
     }
     
@@ -190,6 +185,14 @@ extension HomeController {
         
     }
     
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let video = currentVideos[indexPath.item]
+        
+        let videoLauncher = VideoLauncher()
+        videoLauncher.showVideoPlayer()
+        print(video.title)
+    }
+    
     
 }
 extension HomeController : UICollectionViewDelegateFlowLayout {
@@ -225,10 +228,7 @@ extension HomeController : SettingLauncherDelegate, MenuBarDelegate {
         guard let filter = VideoFilterOptions(rawValue: menuIndex) else {return}
         
         self.selectreFilter = filter
-//        let indexPath = IndexPath(item: menuIndex, section: 0)
-//        collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
-//
-//        setTitleForIndex(index: menuIndex)
+
     }
     
     
