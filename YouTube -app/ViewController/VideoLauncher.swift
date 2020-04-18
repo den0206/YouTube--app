@@ -104,6 +104,8 @@ class VideoPlayerView : UIView {
         slider.maximumTrackTintColor = .white
         slider.setThumbImage(#imageLiteral(resourceName: "hospital"), for: .normal)
         
+        slider.addTarget(self, action: #selector(handleSlider), for: .valueChanged)
+        
         return slider
     }()
     
@@ -160,7 +162,18 @@ class VideoPlayerView : UIView {
             activityIndocator.stopAnimating()
             controllContainerView.backgroundColor = .clear
             pausePlayButton.isHidden = false
+            
             isPlaying = true
+//            pausePlayButton.setImage(#imageLiteral(resourceName: "pause"), for: .normal)
+//            pausePlayButton.tintColor = .clear
+   
+            /// set videoLength (right) Label
+            guard let duration = player?.currentItem?.duration else {return}
+            let secounds = CMTimeGetSeconds(duration)
+            
+            let secoundText = Int(secounds)
+            let minuteText = String(format: "%02d", Int(secounds) / 60)
+            videoLengthLabel.text = "\(minuteText):\(secoundText)"
         }
     }
     
@@ -215,10 +228,25 @@ class VideoPlayerView : UIView {
             self.pausePlayButton.tintColor = .clear
         }
         
-        /// return button
+        
         pausePlayButton.tintColor = .white
         
         isPlaying = !isPlaying
+    }
+    
+    @objc func handleSlider() {
+        
+        guard let duration = player?.currentItem?.duration else {return}
+        let total = CMTimeGetSeconds(duration)
+        
+        let value = Float64(videoSlider.value) * total
+        
+        let seekTime = CMTime(value: Int64(value), timescale: 1)
+        player?.seek(to: seekTime, completionHandler: { (complete) in
+            
+            return
+        })
+        
     }
     
     @objc func handleDismiss() {
