@@ -18,6 +18,14 @@ class APIService {
         fetchFeedForUrlString(urlStrig: "\(baseUrl)/home.json", completion: completion)
     }
     
+    func fetchTrends(completion :  @escaping([Video]) -> Void) {
+         fetchFeedForUrlString(urlStrig: "\(baseUrl)/trending.json", completion: completion)
+    }
+    
+    func fetchSubscriptions(completion :  @escaping([Video]) -> Void) {
+        fetchFeedForUrlString(urlStrig: "\(baseUrl)/subscriptions.json", completion: completion)
+    }
+    
     func fetchFeedForUrlString(urlStrig: String, completion :  @escaping ([Video]) -> Void) {
         guard let url = URL(string: urlStrig) else {return}
         

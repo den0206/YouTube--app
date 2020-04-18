@@ -34,6 +34,7 @@ class MenuBar: UIView {
     let underLineView : UIView = {
         let view = UIView()
         view.backgroundColor = UIColor(white: 0.95, alpha: 1)
+        view.accessibilityRespondsToUserInteraction = false
         return view
     }()
     
@@ -60,8 +61,9 @@ class MenuBar: UIView {
     
     override func layoutSubviews() {
         addSubview(underLineView)
-        underLineView.anchor(left : leftAnchor, bottom: bottomAnchor, width: frame.width / 4, height: 4)
+        underLineView.anchor(bottom: bottomAnchor, width: frame.width / 4, height: 4)
         horizontalBArLeftAncorConstraint = underLineView.leftAnchor.constraint(equalTo: leftAnchor)
+        horizontalBArLeftAncorConstraint?.isActive = true
     }
     
 

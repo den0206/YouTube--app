@@ -12,9 +12,32 @@ private let reuseIdentifer = "VideoCell"
 
 class HomeController: UICollectionViewController {
     
-    var videos = [Video]() {
+    private var selectreFilter : VideoFilterOptions = .Feed {
+        didSet {
+            print(selectreFilter)
+            collectionView.reloadData()
+        }
+    }
+    
+    var feeds = [Video]() {
         didSet {
             collectionView.reloadData()
+        }
+    }
+    var trends = [Video]()
+    var subscriotipns = [Video]()
+    
+    var currentVideos : [Video] {
+        
+        switch selectreFilter {
+        case .Feed:
+            return feeds
+        case .Trend :
+            return trends
+        case .Subscription :
+            return subscriotipns
+        default:
+            return feeds
         }
     }
     
@@ -43,13 +66,14 @@ class HomeController: UICollectionViewController {
         super.viewDidLoad()
         configureCV()
         
-        APIService.shared.fetchVideos { (videos) in
-            
-            self.videos = videos
-        }
+        fetchFeeds()
+        
+        fetchTrends()
+        fetchSubscriptions()
+    
     }
     
- 
+    
     
     private func configureCV() {
         
@@ -83,6 +107,31 @@ class HomeController: UICollectionViewController {
         
     }
     
+    //MARK: - API
+    
+    private func fetchFeeds() {
+        
+        APIService.shared.fetchVideos { (videos) in
+            
+            self.feeds = videos
+        }
+        
+    }
+    
+    private func fetchTrends() {
+        APIService.shared.fetchTrends { (trends) in
+            self.trends = trends
+        }
+    }
+    
+    private func fetchSubscriptions() {
+        APIService.shared.fetchSubscriptions { (subscriptions) in
+            self.subscriotipns = subscriptions
+            
+            self.collectionView.reloadData()
+        }
+    }
+
     //MARK: - Actions
     
     @objc func handleMore() {
@@ -97,24 +146,25 @@ class HomeController: UICollectionViewController {
     
     //MARK: - ScrollView Delagate
     
-//    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-//        menuBar.underLineView.anchor(left : menuBar.leftAnchor, paddingLeft: scrollView.contentOffset.x / 4)
-//
-//    }
-//
-//
-//    override func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-//        let index = Int(targetContentOffset.pointee.x / view.frame.width)
-//
-//        let indexPath = IndexPath(item: index, section: 0)
-//
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
+        menuBar.underLineView.frame.origin.x = scrollView.contentOffset.x / 4
+
+    }
+
+
+    override func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        let index = Int(targetContentOffset.pointee.x / view.frame.width)
+
+        let indexPath = IndexPath(item: index, section: 0)
+
 //        let cell = menuBar.collectionView.cellForItem(at: indexPath)
 //
 //        let xPosition = cell?.frame.origin.x ?? 0
 //        print(xPosition)
-//        menuBar.collectionView.selectItem(at: indexPath, animated: true, scrollPosition: .centeredHorizontally)
-//
-//    }
+        menuBar.collectionView.selectItem(at: indexPath, animated: true, scrollPosition: .centeredHorizontally)
+
+    }
 //
     private func setTitleForIndex(index : Int) {
         if let titleLabel = navigationItem.titleView as? UILabel {
@@ -127,14 +177,14 @@ class HomeController: UICollectionViewController {
 extension HomeController {
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return videos.count
+        return currentVideos.count
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifer, for: indexPath) as! VideoCell
         
-        cell.video = videos[indexPath.item]
+        cell.video = currentVideos[indexPath.item]
         
         return cell
         
@@ -172,10 +222,13 @@ extension HomeController : SettingLauncherDelegate, MenuBarDelegate {
     
     func scrollToMenuIndex(menuIndex: Int) {
         
-        let indexPath = IndexPath(item: menuIndex, section: 0)
-        collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+        guard let filter = VideoFilterOptions(rawValue: menuIndex) else {return}
         
-        setTitleForIndex(index: menuIndex)
+        self.selectreFilter = filter
+//        let indexPath = IndexPath(item: menuIndex, section: 0)
+//        collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+//
+//        setTitleForIndex(index: menuIndex)
     }
     
     
