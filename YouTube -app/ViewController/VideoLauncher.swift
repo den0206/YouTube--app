@@ -38,28 +38,192 @@ class VideoLauncher {
         }
        
     }
+    
+    func hideVideoPlayer() {
+        if let keyWindow = UIWindow.key {
+            
+            keyWindow.removeFromSuperview()
+        }
+    }
 }
 
 class VideoPlayerView : UIView {
     
+    //MARK: - parts
+    
+    let controllContainerView : UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor(white: 0, alpha: 1)
+        
+        return view
+    }()
+    
+    let activityIndocator : UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView()
+        indicator.color = .white
+        indicator.style = .large
+        
+        indicator.startAnimating()
+        return indicator
+    }()
+
+    
+    lazy var pausePlayButton : UIButton = {
+        let button = UIButton(type: .system)
+        button.setImage(#imageLiteral(resourceName: "pause"), for: .normal)
+        button.tintColor = .white
+        button.isHidden = true
+        button.setDimension(width: 50, height: 50)
+        
+        button.addTarget(self, action: #selector(handPause), for: .touchUpInside)
+        
+        return button
+    }()
+    
+    let videoLengthLabel : UILabel = {
+        let label = UILabel()
+        label.text = "00:00"
+        label.textColor = .white
+        label.font = UIFont.boldSystemFont(ofSize: 13)
+        label.textAlignment = .right
+        return label
+    }()
+    
+    let currentTimeLabel : UILabel = {
+         let label = UILabel()
+         label.text = "00:00"
+         label.textColor = .white
+         label.font = UIFont.boldSystemFont(ofSize: 13)
+         label.textAlignment = .right
+         return label
+     }()
+    
+    lazy var videoSlider : UISlider = {
+        let slider = UISlider()
+        slider.minimumTrackTintColor = .red
+        slider.maximumTrackTintColor = .white
+        slider.setThumbImage(#imageLiteral(resourceName: "hospital"), for: .normal)
+        
+        return slider
+    }()
+    
+    let cancelButton : UIButton = {
+        let button = UIButton(type: .system)
+        button.setImage(#imageLiteral(resourceName: "cancel").withTintColor(.white, renderingMode: .alwaysOriginal), for: .normal)
+        button.setDimension(width: 30, height: 30)
+        button.addTarget(self, action: #selector(handleDismiss), for: .touchUpInside)
+        return button
+    }()
+    
+    
+    var player : AVPlayer?
+    
+    var isPlaying = false
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        backgroundColor = .black
+        setupPlayerView()
         
+        setupContainerView()
+
+    }
+    
+    
+    private func setupPlayerView() {
+    
         let urlString = "https://firebasestorage.googleapis.com/v0/b/gameofchats-762ca.appspot.com/o/message_movies%2F12323439-9729-4941-BA07-2BAE970967C7.mov?alt=media&token=3e37a093-3bc8-410f-84d3-38332af9c726"
         
         guard let url = URL(string: urlString) else {return}
-        let player = AVPlayer(url: url)
+        player = AVPlayer(url: url)
         
         let playerLayer = AVPlayerLayer(player: player)
         self.layer.addSublayer(playerLayer)
         playerLayer.frame = self.frame
         
-        player.play()
+        player?.play()
+        player?.addObserver(self, forKeyPath: "currentItem.loadedTimeRanges", options: .new, context: nil)
+        
+//        let interval = CMTime(value: 1, timescale: 2)
+//        player.addPeriodicTimeObserver(forInterval: interval, queue: DispatchQueue.main) { (progressTIme) in
+//
+//        }
+//
+//
+    }
+    
+    /// observer
+    
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        
+        if keyPath == "currentItem.loadedTimeRanges" {
+            activityIndocator.stopAnimating()
+            controllContainerView.backgroundColor = .clear
+            pausePlayButton.isHidden = false
+            isPlaying = true
+        }
+    }
+    
+    private func setupContainerView() {
+        controllContainerView.frame = frame
+        addSubview(controllContainerView)
+        
+        controllContainerView.addSubview(cancelButton)
+        cancelButton.anchor(top : controllContainerView.topAnchor, left: controllContainerView.leftAnchor,paddongTop: 16, paddingLeft: 16)
+        
+        controllContainerView.addSubview(activityIndocator)
+        activityIndocator.center(inView: controllContainerView)
+        
+        controllContainerView.addSubview(pausePlayButton)
+        pausePlayButton.center(inView: controllContainerView)
+        
+        controllContainerView.addSubview(videoLengthLabel)
+        videoLengthLabel.anchor(bottom : bottomAnchor, right:  rightAnchor,paddiongBottom: 8, paddingRight: 8)
+        videoLengthLabel.setDimension(width: 60, height: 24)
+        
+        controllContainerView.addSubview(currentTimeLabel)
+        currentTimeLabel.centerY(inView: videoLengthLabel)
+        currentTimeLabel.anchor(left : leftAnchor, bottom: bottomAnchor,paddingLeft: 8)
+        
+        controllContainerView.addSubview(videoSlider)
+        videoSlider.centerY(inView: currentTimeLabel)
+        videoSlider.anchor(left : currentTimeLabel.rightAnchor, right: videoLengthLabel.leftAnchor, paddingLeft: 8, paddingRight: -8, height: 30)
+        
+        backgroundColor = .black
         
         
+    }
+    
+    //MARK: - Actions
+    
+    @objc func handPause() {
         
+        if isPlaying {
+            
+            player?.pause()
+            pausePlayButton.setImage(#imageLiteral(resourceName: "play"), for: .normal)
+            
+     
+        } else {
+            player?.play()
+            pausePlayButton.setImage(#imageLiteral(resourceName: "pause"), for: .normal)
+        }
+        
+        
+        /// clear button
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3) {
+            self.pausePlayButton.tintColor = .clear
+        }
+        
+        /// return button
+        pausePlayButton.tintColor = .white
+        
+        isPlaying = !isPlaying
+    }
+    
+    @objc func handleDismiss() {
+        let videoLauncher = VideoLauncher()
+        videoLauncher.hideVideoPlayer()
     }
     
     required init?(coder: NSCoder) {
