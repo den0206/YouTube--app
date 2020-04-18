@@ -10,7 +10,14 @@ import UIKit
 
 private let reuseIdentifer = "CellId"
 
+protocol MenuBarDelegate  {
+    func scrollToMenuIndex(menuIndex : Int)
+}
+
 class MenuBar: UIView {
+    
+    var delegate : MenuBarDelegate?
+    
     //MARK: - Parts
     
     lazy var collectionView : UICollectionView = {
@@ -24,7 +31,15 @@ class MenuBar: UIView {
         return cv
     }()
     
+    let underLineView : UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor(white: 0.95, alpha: 1)
+        return view
+    }()
+    
     let imageNames = ["home", "trending", "subscriptions", "account"]
+    
+    var horizontalBArLeftAncorConstraint: NSLayoutConstraint?
     
     
     override init(frame : CGRect) {
@@ -33,15 +48,23 @@ class MenuBar: UIView {
         addSubview(collectionView)
         collectionView.anchor(top : topAnchor,left: leftAnchor,bottom: bottomAnchor,right: rightAnchor)
         
-        // selcted When Launch App
+        //  When Launch App set Selected
         let selectedIndexPath = IndexPath(item: 0, section: 0)
         collectionView.selectItem(at: selectedIndexPath, animated: false, scrollPosition: .bottom)
-        
-        
         
     
     }
     
+    
+    /// add under line
+    
+    override func layoutSubviews() {
+        addSubview(underLineView)
+        underLineView.anchor(left : leftAnchor, bottom: bottomAnchor, width: frame.width / 4, height: 4)
+        horizontalBArLeftAncorConstraint = underLineView.leftAnchor.constraint(equalTo: leftAnchor)
+    }
+    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -61,6 +84,19 @@ extension MenuBar : UICollectionViewDelegate, UICollectionViewDataSource, UIColl
         cell.imageView.image = UIImage(named: imageNames[indexPath.item])?.withRenderingMode(.alwaysTemplate)
         cell.tintColor = UIColor.rgb(red: 91, green: 14, blue: 13)
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        let cell = collectionView.cellForItem(at: indexPath)
+        let xPosition = cell?.frame.origin.x ?? 0
+        print(xPosition)
+        
+        UIView.animate(withDuration: 0.3) {
+            self.underLineView.frame.origin.x = xPosition
+        }
+       
+        delegate?.scrollToMenuIndex(menuIndex: indexPath.item)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

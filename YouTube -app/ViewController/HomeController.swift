@@ -18,12 +18,16 @@ class HomeController: UICollectionViewController {
         }
     }
     
-    let menuBar : MenuBar = {
+    lazy var menuBar : MenuBar = {
         let mb = MenuBar()
+        mb.delegate = self
         return mb
     }()
     
     lazy var settingLauncher = SettingLauncher()
+    
+    let titles = ["Home", "Trending", "Subscription", "Account" ]
+
     
     
     
@@ -66,6 +70,8 @@ class HomeController: UICollectionViewController {
         /// set start line
         collectionView.contentInset = UIEdgeInsets(top: 50, left: 0, bottom: 0, right: 0)
         collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 50, left: 0, bottom: 0, right: 0)
+        
+        collectionView.isPagingEnabled = true
     }
     
     private func setNavBarButtons() {
@@ -89,8 +95,33 @@ class HomeController: UICollectionViewController {
         print("search")
     }
     
-
-
+    //MARK: - ScrollView Delagate
+    
+//    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+//        menuBar.underLineView.anchor(left : menuBar.leftAnchor, paddingLeft: scrollView.contentOffset.x / 4)
+//
+//    }
+//
+//
+//    override func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+//        let index = Int(targetContentOffset.pointee.x / view.frame.width)
+//
+//        let indexPath = IndexPath(item: index, section: 0)
+//
+//        let cell = menuBar.collectionView.cellForItem(at: indexPath)
+//
+//        let xPosition = cell?.frame.origin.x ?? 0
+//        print(xPosition)
+//        menuBar.collectionView.selectItem(at: indexPath, animated: true, scrollPosition: .centeredHorizontally)
+//
+//    }
+//
+    private func setTitleForIndex(index : Int) {
+        if let titleLabel = navigationItem.titleView as? UILabel {
+            titleLabel.text = "\(titles[index])"
+        }
+    }
+    
 }
 
 extension HomeController {
@@ -125,7 +156,8 @@ extension HomeController : UICollectionViewDelegateFlowLayout {
     }
 }
 
-extension HomeController : SettingLauncherDelegate {
+extension HomeController : SettingLauncherDelegate, MenuBarDelegate {
+
     func showControllerForSetting(setting: Setting) {
         /// dummy Example
         
@@ -136,6 +168,14 @@ extension HomeController : SettingLauncherDelegate {
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         navigationController?.pushViewController(dummySerringViewController, animated: true)
         
+    }
+    
+    func scrollToMenuIndex(menuIndex: Int) {
+        
+        let indexPath = IndexPath(item: menuIndex, section: 0)
+        collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+        
+        setTitleForIndex(index: menuIndex)
     }
     
     

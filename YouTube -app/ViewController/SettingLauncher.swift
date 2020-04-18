@@ -52,7 +52,7 @@ class SettingLauncher : NSObject {
     
     @objc func showSettings() {
         /// entire windo
-        if let window = UIApplication.shared.keyWindow {
+        if let window = UIWindow.key {
             ///show menu
             
             blackView.backgroundColor = UIColor.init(white: 0, alpha: 0.5)
@@ -86,7 +86,7 @@ class SettingLauncher : NSObject {
             
             self.blackView.alpha = 0
             
-            if let window = UIApplication.shared.keyWindow {
+            if let window = UIWindow.key {
                 self.collectionView.frame = CGRect(x: 0, y: window.frame.height, width: self.collectionView.frame.width, height: self.collectionView.frame.height)
             }
         }) { (completed: Bool) in
